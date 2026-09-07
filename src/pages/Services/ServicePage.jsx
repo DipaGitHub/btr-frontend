@@ -175,13 +175,10 @@ export function ServicePage({ service: initialService, onApply, slug }) {
 
 
       {/* Main Service Overview */}
-      <section style={{
+      <section className="service-layout-grid" style={{
         maxWidth: '1200px',
         margin: '0 auto',
         padding: '60px 20px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 320px',
-        gap: '50px'
       }}>
         <motion.div 
           initial={{ opacity: 0, x: -30 }}
@@ -236,7 +233,7 @@ export function ServicePage({ service: initialService, onApply, slug }) {
         >
           <div style={{
             width: '100%',
-            height: '240px',
+            aspectRatio: '4/3',
             borderRadius: '16px',
             overflow: 'hidden',
             boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
@@ -306,45 +303,92 @@ export function ServicePage({ service: initialService, onApply, slug }) {
             marginTop: '24px'
           }}>
             {(() => {
+              if (!service.scope_content) return null;
+              
               const parser = new DOMParser();
               const doc = parser.parseFromString(service.scope_content, 'text/html');
+              
+              // Strip inline colors pasted from rich text editors so it's readable on our dark background
+              doc.querySelectorAll('*').forEach(el => {
+                if (el.style) {
+                  el.style.color = '';
+                  el.style.backgroundColor = '';
+                }
+              });
+
               const items = [];
               let currentItem = null;
               
-              Array.from(doc.body.children).forEach(node => {
-                if (node.querySelector('b') || node.querySelector('strong') || ['H2','H3','H4','H5'].includes(node.tagName)) {
+              // Process each node (both elements and raw text)
+              Array.from(doc.body.childNodes).forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
                   const text = node.textContent.trim();
                   if (text) {
-                    if (currentItem) items.push(currentItem);
-                    currentItem = { title: text, content: [] };
+                    if (currentItem) currentItem.content.push(text);
+                    else items.push({ title: null, content: [text] });
+                  }
+                  return;
+                }
+                
+                if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+                const strongNode = node.querySelector('b') || node.querySelector('strong');
+                const isHeading = ['H1','H2','H3','H4','H5','H6'].includes(node.tagName);
+                
+                let titleText = '';
+                if (isHeading) {
+                  titleText = node.textContent.trim();
+                } else if (strongNode) {
+                  titleText = strongNode.textContent.trim();
+                  strongNode.remove(); // Remove to avoid duplicating it in the content
+                } else if (node.tagName === 'B' || node.tagName === 'STRONG') {
+                  titleText = node.textContent.trim();
+                  node.textContent = ''; // empty it
+                }
+
+                const contentHtml = node.innerHTML ? node.innerHTML.trim() : node.textContent.trim();
+                const textContent = node.textContent.trim();
+
+                if (titleText) {
+                  if (currentItem) items.push(currentItem);
+                  currentItem = { title: titleText, content: [] };
+                  // If there is leftover text in this node after removing the title tag
+                  if (contentHtml && contentHtml !== '<br>' && textContent) {
+                     currentItem.content.push(contentHtml);
                   }
                 } else {
-                  const text = node.textContent.trim();
-                  if (text && currentItem) {
-                    currentItem.content.push(node.innerHTML);
-                  } else if (text && !currentItem) {
-                    currentItem = { title: 'Overview', content: [node.innerHTML] };
+                  if (textContent) {
+                    if (currentItem) {
+                      currentItem.content.push(contentHtml);
+                    } else {
+                      // Treat this standalone paragraph as its own bullet point
+                      items.push({ title: null, content: [contentHtml] });
+                    }
                   }
                 }
               });
+              
               if (currentItem) items.push(currentItem);
 
-              if (items.length === 0) {
-                return <div className="scope-of-work-grid" dangerouslySetInnerHTML={{ __html: service.scope_content }} />
+              // Fallback for completely raw unformatted text
+              if (items.length === 0 && service.scope_content.trim()) {
+                items.push({ title: null, content: [service.scope_content] });
               }
 
               return items.map((item, idx) => (
                 <div key={idx} style={{ display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <Check size={18} style={{ color: '#ff4d4d', flexShrink: 0, marginTop: '2px' }} />
-                    <h4 style={{ color: '#ff4d4d', fontSize: '1.05rem', margin: '0 0 10px 0', fontWeight: '600', lineHeight: '1.4' }}>
-                      {item.title}
-                    </h4>
-                  </div>
-                  <div style={{ paddingLeft: '28px' }}>
-                    {item.content.map((htmlStr, i) => (
-                      <p key={i} style={{ color: '#c5cbd8', fontSize: '0.95rem', lineHeight: '1.7', margin: '0 0 10px 0' }} dangerouslySetInnerHTML={{ __html: htmlStr }} />
-                    ))}
+                    <Check size={18} style={{ color: '#ff4d4d', flexShrink: 0, marginTop: '4px' }} />
+                    <div style={{ flex: 1 }}>
+                      {item.title && (
+                        <h4 style={{ color: '#ff4d4d', fontSize: '1.05rem', margin: '0 0 10px 0', fontWeight: '600', lineHeight: '1.4' }}>
+                          {item.title}
+                        </h4>
+                      )}
+                      {item.content.map((htmlStr, i) => (
+                        <p key={i} className="rich-description" style={{ color: '#c5cbd8', fontSize: '0.95rem', lineHeight: '1.7', margin: '0 0 10px 0', textAlign: 'justify' }} dangerouslySetInnerHTML={{ __html: htmlStr }} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))

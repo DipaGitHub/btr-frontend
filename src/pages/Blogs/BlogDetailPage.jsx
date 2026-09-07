@@ -91,34 +91,22 @@ export function BlogDetailPage({ blogId }) {
                             backgroundImage: `url(${blog.imageUrl})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
-                            minHeight: '300px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            color: 'white',
-                            textShadow: '0 2px 4px rgba(0,0,0,0.8)',
-                            position: 'relative',
-                            padding: '40px',
-                            borderRadius: '10px',
-                            marginBottom: '30px'
                         }}
                     >
-                        {/* Dark overlay for better text readability */}
                         <div style={{
                             position: 'absolute',
                             top: 0,
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            backgroundColor: 'rgba(0,0,0,0.4)',
-                            borderRadius: '10px'
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            borderRadius: '9px'
                         }}></div>
                         <div style={{ position: 'relative', zIndex: 1 }}>
                             <div className="idea-trail">✦ · ✦ · ✦</div>
-                            <strong style={{ fontSize: '2.5rem' }}>{blog.title.toUpperCase()}</strong>
-                            <span style={{ display: 'block', marginTop: '10px' }}>Ideas that move brands forward</span>
-                            <i style={{ display: 'block', marginTop: '15px', fontStyle: 'italic' }}>Explore the story</i>
+                            <strong>{blog.title.toUpperCase()}</strong>
+                            <span>Ideas that move brands forward</span>
+                            <i>Explore the story</i>
                         </div>
                     </div>
 
@@ -134,11 +122,9 @@ export function BlogDetailPage({ blogId }) {
 
                     {/* Content */}
                     <h2>{blog.title}</h2>
-                    <p className="blog-excerpt">{blog.short_description}</p>
                     
                     {/* Additional content */}
-                    <div className="blog-content">
-                        <p>{blog.short_description}</p>
+                    <div className="blog-content" dangerouslySetInnerHTML={{ __html: blog.long_description || blog.content || blog.short_description }}>
                     </div>
 
                     {/* Tags */}
@@ -157,23 +143,9 @@ export function BlogDetailPage({ blogId }) {
                         .filter(b => b.id !== blog.id)
                         .slice(0, 3)
                         .map(relatedBlog => (
-                            <button 
+                                <button 
                                 key={relatedBlog.id} 
-                                className="latest-update-item"
                                 onClick={() => go(`/blogs/${relatedBlog.id}`)}
-                                style={{
-                                    width: '100%',
-                                    padding: '15px',
-                                    marginBottom: '15px',
-                                    backgroundColor: 'white',
-                                    border: '1px solid #e9ecef',
-                                    borderRadius: '8px',
-                                    cursor: 'pointer',
-                                    textAlign: 'left',
-                                    display: 'flex',
-                                    gap: '15px',
-                                    alignItems: 'center'
-                                }}
                             >
                                 <div 
                                     className="blog-detail-art compact"
@@ -181,40 +153,21 @@ export function BlogDetailPage({ blogId }) {
                                         backgroundImage: `url(${relatedBlog.imageUrl})`,
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'center',
-                                        minWidth: '80px',
-                                        height: '60px',
-                                        borderRadius: '8px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)',
-                                        position: 'relative',
-                                        padding: '10px'
                                     }}
                                 >
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        backgroundColor: 'rgba(0,0,0,0.3)',
-                                        borderRadius: '8px'
-                                    }}></div>
-                                    <strong style={{ position: 'relative', zIndex: 1, fontSize: '0.8rem' }}>
+                                    <strong>
                                         {relatedBlog.title.toUpperCase().substring(0, 3)}
                                     </strong>
                                 </div>
                                 <span>
-                                    <small style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#888' }}>
+                                    <small>
                                         <CalendarDays size={12} /> 
                                         {new Date(relatedBlog.publish_date).toLocaleDateString('en-US', {
                                             month: 'short',
                                             day: 'numeric'
                                         })}
                                     </small>
-                                    <strong style={{ fontSize: '0.95rem', color: '#333' }}>{relatedBlog.title}</strong>
+                                    <strong>{relatedBlog.title}</strong>
                                 </span>
                             </button>
                         ))}
@@ -222,29 +175,10 @@ export function BlogDetailPage({ blogId }) {
             </section>
 
             {/* Back to Blogs Button */}
-            <div className="back-to-blogs" style={{ maxWidth: '1200px', margin: '0 auto 40px', padding: '0 20px' }}>
+            <div className="back-to-blogs" style={{ maxWidth: '1080px', margin: '0 auto 40px', padding: '0 30px' }}>
                 <button 
                     onClick={() => go('/blogs')}
-                    style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '10px 20px',
-                        backgroundColor: 'transparent',
-                        border: '1px solid #ddd',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s',
-                        color: '#333'
-                    }}
-                    onMouseOver={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f5f5f5';
-                        e.currentTarget.style.borderColor = '#333';
-                    }}
-                    onMouseOut={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.borderColor = '#ddd';
-                    }}
+                    className="button"
                 >
                     <ArrowLeft size={16} /> Back to all blogs
                 </button>

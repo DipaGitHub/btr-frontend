@@ -3,6 +3,7 @@ import { ApplicationModal } from '../components/forms/ApplicationModal'
 import { Footer } from '../components/layout/Footer'
 import { Header } from '../components/layout/Header'
 import { UpdateDetailsPage } from '../components/UpdateDetailsPage'
+import { FloatingActionButtons } from '../components/layout/FloatingActionButtons'
 import { blogs, projects, serviceData } from '../data/siteData'
 import { AboutPage } from '../pages/About/AboutPage'
 import { BlogsPage } from '../pages/Blogs/BlogsPage'
@@ -67,6 +68,7 @@ export function App() {
       <main>{resolvePage(path, openApplication)}</main>
       <Footer />
       {modal && <ApplicationModal onClose={() => setModal(false)} />}
+      <FloatingActionButtons currentPath={path} />
     </div>
   )
 }

@@ -6,7 +6,7 @@ import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import { projects as fallbackProjects, serviceData as fallbackServices } from '../../data/siteData'
 import { go } from '../../utils/navigation'
-import { ProjectCard, SectionHeading, ServiceCard } from '../../components/shared/SiteComponents'
+import { ProjectCard, SectionHeading, ServiceCard, CountUp } from '../../components/shared/SiteComponents'
 import { DigitalExcellence, FaqSection, LatestInsights, Testimonials, AboutUsSection, ProcessSection } from './HomeSections'
 import { OrbitSystem } from '../../components/animations/Orbit'
 import { Marquee } from '../../components/animations/Marquee'
@@ -99,6 +99,7 @@ function TechMarquee() {
 export function HomePage({ onApply }) {
   const [services, setServices]         = useState(fallbackServices)
   const [portfolioList, setPortfolioList] = useState(fallbackProjects)
+  const [heroDescription, setHeroDescription] = useState('We create digital experiences that make ambitious brands easier to find, easier to trust, and impossible to forget.')
 
   // Fetch services
   useEffect(() => {
@@ -167,24 +168,13 @@ export function HomePage({ onApply }) {
       <section className="hero section-dark">
         <HeroBackground />
         
-        {/* Service category strip — full-width top band */}
-        <div className="hero-strip-row" aria-hidden="true">
-          <Marquee
-            items={SERVICE_STRIP_ITEMS}
-            speed={40}
-            gap={64}
-            separator="★"
-          />
-        </div>
-
         {/* Main hero content */}
         <div className="hero-content-row">
           <div className="hero-copy">
             <div className="eyebrow">BTR COMMUNICATION</div>
-            <HeroHeadline />
+            <HeroHeadline onDescriptionChange={setHeroDescription} />
             <p>
-              We create digital experiences that make ambitious brands easier to
-              find, easier to trust, and impossible to forget.
+              {heroDescription}
             </p>
             <div className="hero-glow-buttons">
               <div className="hero-glow-wrapper">
@@ -227,10 +217,10 @@ export function HomePage({ onApply }) {
             </p>
           </div>
           <div className="stats">
-            <b>350+<small>Projects completed</small></b>
-            <b>14+<small>Team members</small></b>
-            <b>9+<small>Years experience</small></b>
-            <b>230+<small>Happy clients</small></b>
+            <b><CountUp to={350} suffix="+" /><small>Projects completed</small></b>
+            <b><CountUp to={14} suffix="+" /><small>Team members</small></b>
+            <b><CountUp to={9} suffix="+" /><small>Years experience</small></b>
+            <b><CountUp to={230} suffix="+" /><small>Happy clients</small></b>
           </div>
         </section>
       </Reveal>
@@ -257,6 +247,14 @@ export function HomePage({ onApply }) {
               </Reveal>
             );
           })}
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '60px' }}>
+          <Reveal direction="up" delay={0.2}>
+            <button className="button button-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={() => go('/services')}>
+              View all services <ArrowRight size={16} />
+            </button>
+          </Reveal>
         </div>
       </section>
 
@@ -353,7 +351,7 @@ export function HomePage({ onApply }) {
           <span className="section-kicker">LET&apos;S TALK</span>
           <h2>Ready to make your <em>next move?</em></h2>
         </div>
-        <button className="button button-light" onClick={onApply}>
+        <button className="button" onClick={onApply}>
           Start a conversation <ArrowUpRight size={17} />
         </button>
       </section>

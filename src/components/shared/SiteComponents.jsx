@@ -78,7 +78,7 @@ export function ProjectCard({ project }) {
   )
 }
 
-function CountUp({ to, suffix = '' }) {
+export function CountUp({ to, suffix = '' }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
   

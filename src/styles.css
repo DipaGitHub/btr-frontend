@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
 
 /* ── Design tokens ─────────────────────────────────────────── */
 :root {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #e8e8ec;
   background: #0d0e15;
   font-synthesis: none;
@@ -56,8 +57,14 @@ h1,
 h2,
 h3,
 h4,
-h5 {
-  margin: 0
+h5,
+h6 {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+p {
+  text-align: justify;
 }
 
 /* ── Layout shell ──────────────────────────────────────────── */
@@ -113,7 +120,7 @@ h5 {
 }
 
 .logo small {
-  font: 500 5px 'DM Sans', sans-serif;
+  font: 500 5px 'Roboto', sans-serif;
   letter-spacing: .3px;
   margin-top: 6px;
   color: var(--muted)
@@ -479,7 +486,7 @@ h5 {
 }
 
 .section-heading h2 {
-  font: 600 clamp(30px, 3.8vw, 50px) 'Space Grotesk';
+  font: 600 clamp(30px, 3.8vw, 50px) 'Poppins';
   letter-spacing: -.03em;
   margin: 14px 0 16px;
   color: var(--white);
@@ -697,7 +704,7 @@ h2 em,
 }
 
 .hero h1 {
-  font: 700 clamp(40px, 5.6vw, 76px)/.95 'Space Grotesk';
+  font: 700 clamp(40px, 5.6vw, 76px)/.95 'Poppins';
   letter-spacing: -.05em;
   margin: 20px 0 24px;
   color: var(--white);
@@ -739,6 +746,7 @@ h2 em,
   display: grid;
   place-items: center;
   flex-shrink: 0;
+  z-index: 3;
 }
 
 /* Decorative concentric rings */
@@ -750,7 +758,7 @@ h2 em,
 
 .orbit-deco-border {
   inset: 0;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   background: radial-gradient(circle at 50% 50%, #161924 0%, transparent 65%);
 }
 
@@ -760,7 +768,7 @@ h2 em,
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 1px solid rgba(180, 50, 55, 0.3);
+  border: 1px solid rgba(229, 46, 46, 0.25);
 }
 
 .orbit-deco-core {
@@ -769,7 +777,7 @@ h2 em,
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 1px solid rgba(60, 68, 90, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 /* Spinning parent containers */
@@ -789,38 +797,51 @@ h2 em,
 }
 
 /* Node wrappers — positioned via JS trig, counter-animated to stay upright */
+/* Node wrappers — positioned via JS trig, counter-animated to stay upright */
 .orbit-node-wrap {
   position: absolute;
   pointer-events: auto;
+  width: 0;
+  height: 0;
 }
 
 .orbit-counter-cw {
-  animation: orbit-node-ctr-cw 22s linear infinite
+  animation: orbit-node-ctr-cw 22s linear infinite;
 }
 
 .orbit-counter-ccw {
-  animation: orbit-node-ctr-ccw 34s linear infinite
+  animation: orbit-node-ctr-ccw 34s linear infinite;
 }
 
-/* Coloured pill badges */
-.orbit-badge {
-  display: inline-flex;
-  align-items: center;
-  height: 28px;
-  padding: 0 10px;
-  border-radius: 14px;
-  font-size: 9.5px;
+/* Icon Bubble Nodes */
+.orbit-icon-bubble {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  top: -18px;
+  left: -18px;
+  border-radius: 50%;
+  background: rgba(11, 13, 20, 0.85);
+  display: grid;
+  place-items: center;
+  transition: transform 0.3s ease;
+}
+
+.orbit-node-wrap:hover .orbit-icon-bubble {
+  transform: scale(1.2);
+}
+
+.orbit-icon-label {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   user-select: none;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-}
-
-.orbit-badge-sm {
-  height: 24px;
-  padding: 0 8px;
-  font-size: 8px;
 }
 
 /* Central BTR logo bubble */
@@ -971,7 +992,7 @@ h2 em,
 }
 
 .home-intro h2 {
-  font: 600 clamp(28px, 3.5vw, 50px) 'Space Grotesk';
+  font: 600 clamp(28px, 3.5vw, 50px) 'Poppins';
   letter-spacing: -.03em;
   margin: 14px 0 18px;
   color: var(--white);
@@ -993,7 +1014,7 @@ h2 em,
 }
 
 .stats b {
-  font: 700 30px 'Space Grotesk';
+  font: 700 30px 'Poppins';
   color: var(--red);
   display: block;
   text-align: center;
@@ -1039,7 +1060,7 @@ h2 em,
   text-align: center;
 }
 
-.service-card > * {
+.service-card>* {
   position: relative;
   z-index: 1;
 }
@@ -1089,7 +1110,7 @@ h2 em,
   height: 56px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   object-fit: cover;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
@@ -1101,7 +1122,7 @@ h2 em,
 }
 
 .service-card h3 {
-  font: 600 16px 'Space Grotesk';
+  font: 600 16px 'Poppins';
   color: var(--white);
   margin: 0 0 10px;
 }
@@ -1124,11 +1145,12 @@ h2 em,
 }
 
 /* The image fills the right side of the section, full height */
-.about-wrapper > .about-image {
+.about-wrapper>.about-image {
   display: none;
 }
+
 @media (min-width: 992px) {
-  .about-wrapper > .about-image {
+  .about-wrapper>.about-image {
     display: block;
     position: absolute;
     top: 30px;
@@ -1139,13 +1161,15 @@ h2 em,
     border-radius: 16px;
     overflow: hidden;
   }
-  .about-wrapper > .about-image img {
+
+  .about-wrapper>.about-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
-  .about-wrapper > .about-image::after {
+
+  .about-wrapper>.about-image::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -1160,6 +1184,7 @@ h2 em,
   z-index: 2;
   padding: 90px max(7vw, 36px);
 }
+
 @media (min-width: 992px) {
   .about-inner {
     width: 55%;
@@ -1168,14 +1193,15 @@ h2 em,
 }
 
 .about-content {
-  max-width: 560px;
+  max-width: 650px;
 }
 
 .about-content h2 {
-  font: 700 clamp(30px, 3.8vw, 44px) 'Space Grotesk';
+  font: 700 clamp(30px, 3.8vw, 44px) 'Poppins';
   color: var(--white);
   margin-bottom: 24px;
 }
+
 .about-content p {
   color: var(--muted);
   font-size: 15px;
@@ -1183,18 +1209,21 @@ h2 em,
   margin-bottom: 16px;
   text-align: justify;
 }
+
 .about-features {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 32px;
   margin-top: 32px;
   margin-bottom: 48px;
 }
+
 @media (max-width: 599px) {
   .about-features {
     grid-template-columns: 1fr;
   }
 }
+
 .about-feature {
   display: flex;
   align-items: flex-start;
@@ -1202,6 +1231,7 @@ h2 em,
   color: var(--white);
   font-size: 14px;
 }
+
 .about-feature svg {
   color: var(--red);
   margin-top: 2px;
@@ -1216,7 +1246,9 @@ h2 em,
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
   max-width: 550px;
+  box-shadow: 0 0 24px rgba(229, 46, 46, 0.15);
 }
+
 .about-clients-label {
   background: var(--red);
   color: #fff;
@@ -1229,6 +1261,7 @@ h2 em,
   z-index: 2;
   white-space: nowrap;
 }
+
 .about-clients-label::after {
   content: '';
   position: absolute;
@@ -1249,22 +1282,31 @@ h2 em,
   position: relative;
   padding: 0 10px;
 }
+
+.about-marquee-container .btr-marquee-track {
+  animation-duration: 15s;
+}
+
 .about-marquee-container .btr-marquee-track img {
   height: 32px;
   width: auto;
-  opacity: 0.5;
-  filter: grayscale(100%);
-  transition: opacity 0.3s, filter 0.3s;
+  opacity: 0.8;
+  /* Invert makes white backgrounds black and dark text white. 
+     Screen blend mode makes black backgrounds transparent. 
+     This perfectly handles JPEGs and dark PNGs! */
+  filter: invert(1) grayscale(100%) brightness(1.5);
+  mix-blend-mode: screen;
+  transition: opacity 0.3s;
   object-fit: contain;
 }
+
 .about-marquee-container .btr-marquee-track img:hover {
   opacity: 1;
-  filter: grayscale(0%);
 }
 
 /* Mobile: show image inline below text */
 @media (max-width: 991px) {
-  .about-wrapper > .about-image {
+  .about-wrapper>.about-image {
     display: block;
     width: 100%;
     border-radius: 12px;
@@ -1272,7 +1314,8 @@ h2 em,
     margin: 0 auto;
     padding: 0 max(7vw, 36px) 60px;
   }
-  .about-wrapper > .about-image img {
+
+  .about-wrapper>.about-image img {
     width: 100%;
     height: auto;
     border-radius: 12px;
@@ -1474,77 +1517,59 @@ h2 em,
 /* ══════════════════════════════════════════════════════════════
    PROCESS SECTION
 ══════════════════════════════════════════════════════════════ */
-.process-scroll-target {
-  height: 125vh; /* Decreased height to make the horizontal scroll faster */
-  position: relative;
+.process-section {
+  padding: 100px 20px;
   background: var(--bg);
-}
-
-.process-sticky-container {
-  position: sticky;
-  top: 15vh; /* Stick further down to center visually */
-  height: 70vh; /* Shorter height so it doesn't leave a huge empty gap at the bottom */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  position: relative;
   overflow: hidden;
 }
 
-.process-sticky-header {
+.process-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 }
-.process-sticky-header h2 {
-  font-size: clamp(24px, 3vw, 36px);
+
+.process-header h2 {
+  font-size: clamp(28px, 4vw, 42px);
   font-weight: bold;
   color: var(--white);
 }
 
-.process-horizontal-overflow {
-  display: flex;
-  align-items: center;
-  width: 100%;
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
-.process-horizontal-track {
-  display: flex;
-  gap: 80px;
-  padding: 0 10vw;
+@media (max-width: 1024px) {
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.process-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   position: relative;
-  width: max-content;
-  align-items: center;
-}
-
-.process-timeline-bg {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: rgba(229, 46, 46, 0.2); /* var(--red) at 20% */
-  transform: translateY(-50%);
-}
-
-.process-timeline-fill {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--red);
-  transform: translateY(-50%) scaleX(0);
-  transform-origin: left;
-}
-
-.process-h-card-wrapper {
-  position: relative;
-  min-width: 350px;
+  display: flex;
+  flex-direction: column;
 }
 
 .process-number {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  top: -24px;
+  right: 32px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -1555,32 +1580,10 @@ h2 em,
   justify-content: center;
   font-weight: bold;
   box-shadow: 0 4px 12px rgba(229, 46, 46, 0.4);
-  z-index: 20;
+  z-index: 2;
 }
 
-.align-top .process-number {
-  top: calc(50% + 32px);
-}
-.align-bottom .process-number {
-  bottom: calc(50% + 32px);
-}
-
-.process-h-card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.align-top .process-h-card {
-  margin-bottom: 160px;
-}
-.align-bottom .process-h-card {
-  margin-top: 160px;
-}
-
-.process-h-icon {
+.process-icon {
   width: 56px;
   height: 56px;
   border-radius: 12px;
@@ -1654,7 +1657,7 @@ h2 em,
 }
 
 .digital-copy h2 {
-  font: 600 clamp(24px, 3vw, 40px) 'Space Grotesk';
+  font: 600 clamp(24px, 3vw, 40px) 'Poppins';
   color: var(--white);
   letter-spacing: -.03em;
   margin: 14px 0 20px;
@@ -1693,7 +1696,7 @@ h2 em,
 }
 
 .home-section-title h2 {
-  font: 600 clamp(26px, 3.5vw, 46px) 'Space Grotesk';
+  font: 600 clamp(26px, 3.5vw, 46px) 'Poppins';
   color: var(--white);
   letter-spacing: -.03em;
 }
@@ -1757,7 +1760,7 @@ h2 em,
 }
 
 .testimonial-name {
-  font: 600 15px 'Space Grotesk';
+  font: 600 15px 'Poppins';
   color: var(--white)
 }
 
@@ -1934,7 +1937,7 @@ h2 em,
 }
 
 .insight-art-inner strong {
-  font: 600 18px 'Space Grotesk';
+  font: 600 18px 'Poppins';
   color: #fff;
   line-height: 1.25
 }
@@ -1960,7 +1963,7 @@ h2 em,
 }
 
 .insight-grid article h3 {
-  font: 600 14px 'Space Grotesk';
+  font: 600 14px 'Poppins';
   color: var(--white);
   padding: 0 18px;
   margin: 4px 0 8px
@@ -2004,7 +2007,7 @@ h2 em,
 }
 
 .contact-cta h2 {
-  font: 600 clamp(28px, 3.5vw, 50px) 'Space Grotesk';
+  font: 600 clamp(28px, 3.5vw, 50px) 'Poppins';
   letter-spacing: -.03em;
   color: var(--white);
   margin: 14px 0;
@@ -2038,7 +2041,7 @@ h2 em,
 }
 
 .footer h4 {
-  font: 600 13px 'Space Grotesk';
+  font: 600 13px 'Poppins';
   color: var(--soft);
   margin-bottom: 16px;
   text-transform: uppercase;
@@ -2078,7 +2081,7 @@ h2 em,
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
   padding: 0 !important;
   color: var(--muted);
   transition: all 0.3s;
@@ -2138,11 +2141,45 @@ h2 em,
   filter: blur(28px);
 }
 
-.rb-1 { width: 90px; height: 90px; left: 15%; top: 20%; animation: floatRedDots 8s ease-in-out infinite; }
-.rb-2 { width: 110px; height: 110px; right: 20%; top: 10%; animation: floatRedDots 11s ease-in-out infinite reverse; }
-.rb-3 { width: 70px; height: 70px; left: 45%; bottom: 10%; animation: floatRedDots 9s ease-in-out infinite 2s; }
-.rb-4 { width: 130px; height: 130px; left: 80%; bottom: -20px; animation: floatRedDots 13s ease-in-out infinite 1s reverse; }
-.rb-5 { width: 60px; height: 60px; left: 5%; bottom: 30%; animation: floatRedDots 10s ease-in-out infinite 3s; }
+.rb-1 {
+  width: 90px;
+  height: 90px;
+  left: 15%;
+  top: 20%;
+  animation: floatRedDots 8s ease-in-out infinite;
+}
+
+.rb-2 {
+  width: 110px;
+  height: 110px;
+  right: 20%;
+  top: 10%;
+  animation: floatRedDots 11s ease-in-out infinite reverse;
+}
+
+.rb-3 {
+  width: 70px;
+  height: 70px;
+  left: 45%;
+  bottom: 10%;
+  animation: floatRedDots 9s ease-in-out infinite 2s;
+}
+
+.rb-4 {
+  width: 130px;
+  height: 130px;
+  left: 80%;
+  bottom: -20px;
+  animation: floatRedDots 13s ease-in-out infinite 1s reverse;
+}
+
+.rb-5 {
+  width: 60px;
+  height: 60px;
+  left: 5%;
+  bottom: 30%;
+  animation: floatRedDots 10s ease-in-out infinite 3s;
+}
 
 .page-banner>* {
   position: relative;
@@ -2159,7 +2196,7 @@ h2 em,
 }
 
 .page-banner h1 {
-  font: 600 clamp(26px, 3.5vw, 42px) 'Space Grotesk';
+  font: 600 clamp(26px, 3.5vw, 42px) 'Poppins';
   color: var(--white);
   margin: 10px 0 8px;
   letter-spacing: -.02em;
@@ -2185,7 +2222,7 @@ h2 em,
 .about-story h2,
 .detail-copy h2,
 .contact-info h2 {
-  font: 600 clamp(24px, 2.8vw, 36px) 'Space Grotesk';
+  font: 600 clamp(24px, 2.8vw, 36px) 'Poppins';
   color: var(--white);
   letter-spacing: -.03em;
   margin: 14px 0 20px;
@@ -2221,7 +2258,7 @@ h2 em,
 }
 
 .years-card strong {
-  font: 600 20px 'Space Grotesk';
+  font: 600 20px 'Poppins';
   color: var(--white)
 }
 
@@ -2243,7 +2280,7 @@ h2 em,
 }
 
 .split-panel h3 {
-  font: 600 15px 'Space Grotesk';
+  font: 600 15px 'Poppins';
   color: var(--red);
   margin-bottom: 16px
 }
@@ -2442,7 +2479,7 @@ h2 em,
 }
 
 .blog-image strong {
-  font: 600 20px 'Space Grotesk';
+  font: 600 20px 'Poppins';
   color: var(--white);
   max-width: 240px;
   line-height: 1.2
@@ -2469,7 +2506,7 @@ h2 em,
 }
 
 .blog-card h3 {
-  font: 600 14px 'Space Grotesk';
+  font: 600 14px 'Poppins';
   color: var(--white);
   padding: 4px 18px;
   margin-bottom: 8px
@@ -2515,7 +2552,7 @@ h2 em,
 }
 
 .side-card h3 {
-  font: 600 14px 'Space Grotesk';
+  font: 600 14px 'Poppins';
   color: var(--white);
   margin-bottom: 12px
 }
@@ -2561,7 +2598,7 @@ h2 em,
 }
 
 .modal h2 {
-  font: 600 22px 'Space Grotesk';
+  font: 600 22px 'Poppins';
   color: var(--white);
   margin: 0 0 20px
 }
@@ -2623,6 +2660,26 @@ h2 em,
   margin-top: 14px
 }
 
+/* Ensure rich text editor content respects dark mode text colors */
+.rich-description *,
+.rich-description span {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
+/* Service Page Layout Grid */
+.service-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 50px;
+}
+
+@media (max-width: 968px) {
+  .service-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ══════════════════════════════════════════════════════════════
    ANIMATIONS / KEYFRAMES
 ══════════════════════════════════════════════════════════════ */
@@ -2639,24 +2696,24 @@ h2 em,
   }
 }
 
-/* Orbit node counter-rotations — must include translate(-50%,-50%) to keep centering */
+/* Orbit node counter-rotations — keep elements upright */
 @keyframes orbit-node-ctr-cw {
   from {
-    transform: translate(-50%, -50%) rotate(0deg)
+    transform: rotate(0deg);
   }
 
   to {
-    transform: translate(-50%, -50%) rotate(-360deg)
+    transform: rotate(-360deg);
   }
 }
 
 @keyframes orbit-node-ctr-ccw {
   from {
-    transform: translate(-50%, -50%) rotate(0deg)
+    transform: rotate(0deg);
   }
 
   to {
-    transform: translate(-50%, -50%) rotate(360deg)
+    transform: rotate(360deg);
   }
 }
 
@@ -2729,7 +2786,7 @@ h2 em,
 
 .project-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .project-art {
@@ -2809,10 +2866,23 @@ h2 em,
 }
 
 @keyframes floatRedDots {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(10px, -15px); }
-  50% { transform: translate(-5px, -25px); }
-  75% { transform: translate(-15px, 5px); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(10px, -15px);
+  }
+
+  50% {
+    transform: translate(-5px, -25px);
+  }
+
+  75% {
+    transform: translate(-15px, 5px);
+  }
 }
 
 
@@ -3211,7 +3281,7 @@ h2 em,
   background-color: #ffffff !important;
   color: #000000 !important;
 }
+
 .pricing-btn-hover:hover svg {
   transform: translate(2px, -2px);
 }
-

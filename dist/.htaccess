@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # If an existing asset or directory is requested, serve it
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # Exclude the backend directory from rewriting so Node.js can handle it
+  RewriteCond %{REQUEST_URI} !^/backend/
+  
+  # Exclude the adminpanel directory from rewriting so it can load its own index.html
+  RewriteCond %{REQUEST_URI} !^/adminpanel/
+  
+  # Otherwise, rewrite all requests to index.html
+  RewriteRule ^ index.html [L]
+</IfModule>

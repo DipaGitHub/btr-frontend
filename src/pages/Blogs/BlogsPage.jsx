@@ -117,7 +117,8 @@ export function BlogsPage() {
                                 <h3>{blog.title}</h3>
                                 <p className="blog-excerpt">{blog.short_description}</p>
                                 <button 
-                                    className="card-link" 
+                                    className="button" 
+                                    style={{ margin: 'auto 18px 22px 18px', alignSelf: 'flex-start' }}
                                     onClick={event => {
                                         event.stopPropagation();
                                         openBlog();

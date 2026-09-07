@@ -1,28 +1,32 @@
 import { Logo } from '../shared/SiteComponents'
+import { 
+  Code, Terminal, Database, Cloud, Cpu, Globe, Monitor, 
+  Smartphone, Layout, Server, PenTool, ShoppingCart
+} from 'lucide-react'
+import { FaPython, FaNodeJs, FaHtml5, FaCss3Alt, FaReact, FaJava } from 'react-icons/fa'
 
-// Outer orbit ring nodes - coloured pill badges
+// Outer orbit ring - tech icons with their glow colors
 const OUTER_NODES = [
-  { label: 'API', bg: '#2d0e2a', border: '#c840b8', color: '#ff92ec' },
-  { label: 'AI/ML', bg: '#1e1240', border: '#8860d8', color: '#c8a8ff' },
-  { label: 'Code', bg: '#0a2238', border: '#0892c4', color: '#3dd4ff' },
-  { label: 'DNS', bg: '#0b2a26', border: '#29b09b', color: '#5ae8cc' },
-  { label: 'Database', bg: '#082550', border: '#1478d8', color: '#5ab8ff' },
-  { label: 'Cloud', bg: '#301808', border: '#c46c18', color: '#ffad4a' },
-  { label: 'Shopping', bg: '#281808', border: '#d4941a', color: '#ffc84a' },
-  { label: 'ERP', bg: '#400c0a', border: '#e02420', color: '#ff7470' },
+  { Icon: FaPython, color: '#3776AB', glow: 'rgba(55, 118, 171, 0.5)', label: 'Python' },
+  { Icon: Globe, color: '#c8a8ff', glow: 'rgba(200, 168, 255, 0.5)', label: 'Web' },
+  { Icon: Code, color: '#3dd4ff', glow: 'rgba(61, 212, 255, 0.5)', label: 'Code' },
+  { Icon: Database, color: '#5ae8cc', glow: 'rgba(90, 232, 204, 0.5)', label: 'Database' },
+  { Icon: FaNodeJs, color: '#68A063', glow: 'rgba(104, 160, 99, 0.5)', label: 'Node.js' },
+  { Icon: Cloud, color: '#ffad4a', glow: 'rgba(255, 173, 74, 0.5)', label: 'Cloud' },
+  { Icon: ShoppingCart, color: '#ffc84a', glow: 'rgba(255, 200, 74, 0.5)', label: 'Commerce' },
+  { Icon: Cpu, color: '#ff7470', glow: 'rgba(255, 116, 112, 0.5)', label: 'Hardware' },
 ]
 
-// Inner orbit ring nodes
+// Inner orbit ring - tech icons
 const INNER_NODES = [
-  { label: 'UI/UX', bg: '#160e2a', border: '#7040b0', color: '#c090ff' },
-  { label: 'SEO', bg: '#0c1e14', border: '#22904c', color: '#50e890' },
-  { label: 'Mobile', bg: '#280e0e', border: '#b83030', color: '#ff7070' },
-  { label: 'Brand', bg: '#261a06', border: '#a07018', color: '#f0b840' },
+  { Icon: Layout, color: '#c090ff', glow: 'rgba(192, 144, 255, 0.5)', label: 'UI/UX' },
+  { Icon: FaReact, color: '#61DAFB', glow: 'rgba(97, 218, 251, 0.5)', label: 'React' },
+  { Icon: Smartphone, color: '#ff7070', glow: 'rgba(255, 112, 112, 0.5)', label: 'Mobile' },
+  { Icon: PenTool, color: '#f0b840', glow: 'rgba(240, 184, 64, 0.5)', label: 'Design' },
 ]
 
 /**
  * Compute (x, y) percentage positions on a circle.
- * radiusFactor is in percentage units relative to the container (0-50).
  */
 function ringPositions(count, radiusFactor) {
   return Array.from({ length: count }, (_, i) => {
@@ -35,14 +39,11 @@ function ringPositions(count, radiusFactor) {
 }
 
 /**
- * Orbital animation system:
- *  - Outer ring spins CW at 22s; nodes counter-rotate to stay upright
- *  - Inner ring spins CCW at 34s; nodes counter-rotate (CW) to stay upright
- *  - Central BTR logo is static
+ * Orbital animation system with tech icons as orbiting planets
  */
 export function OrbitSystem() {
-  const outerPos = ringPositions(OUTER_NODES.length, 44)
-  const innerPos = ringPositions(INNER_NODES.length, 24)
+  const outerPos = ringPositions(OUTER_NODES.length, 50)
+  const innerPos = ringPositions(INNER_NODES.length, 26)
 
   return (
     <div className="orbit-art">
@@ -55,14 +56,20 @@ export function OrbitSystem() {
       <div className="orbit-spinner orbit-spin-cw">
         {OUTER_NODES.map((node, i) => (
           <div
-            key={node.label}
+            key={`outer-${i}`}
             className="orbit-node-wrap orbit-counter-cw"
             style={{ left: `${outerPos[i].x}%`, top: `${outerPos[i].y}%` }}
           >
-            <span
-              className="orbit-badge"
-              style={{ background: node.bg, border: `1px solid ${node.border}`, color: node.color }}
+            <div 
+              className="orbit-icon-bubble"
+              style={{ 
+                border: `1.5px solid ${node.color}`,
+                boxShadow: `0 0 12px ${node.glow}`,
+              }}
             >
+              <node.Icon size={16} color={node.color} />
+            </div>
+            <span className="orbit-icon-label" style={{ color: node.color, textShadow: `0 0 8px ${node.glow}` }}>
               {node.label}
             </span>
           </div>
@@ -73,14 +80,20 @@ export function OrbitSystem() {
       <div className="orbit-spinner orbit-spin-ccw">
         {INNER_NODES.map((node, i) => (
           <div
-            key={node.label}
+            key={`inner-${i}`}
             className="orbit-node-wrap orbit-counter-ccw"
             style={{ left: `${innerPos[i].x}%`, top: `${innerPos[i].y}%` }}
           >
-            <span
-              className="orbit-badge orbit-badge-sm"
-              style={{ background: node.bg, border: `1px solid ${node.border}`, color: node.color }}
+            <div 
+              className="orbit-icon-bubble"
+              style={{ 
+                border: `1.5px solid ${node.color}`,
+                boxShadow: `0 0 12px ${node.glow}`,
+              }}
             >
+              <node.Icon size={16} color={node.color} />
+            </div>
+            <span className="orbit-icon-label" style={{ color: node.color, textShadow: `0 0 8px ${node.glow}` }}>
               {node.label}
             </span>
           </div>

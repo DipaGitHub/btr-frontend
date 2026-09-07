@@ -32,8 +32,20 @@ const fallbackFaqs = [
 export function DigitalExcellence() {
   return (
     <section className="digital-excellence relative">
-      <div className="digital-excellence-bg">
-        <img src="/digital-excellence-bg.jpg" alt="Digital Excellence Background" />
+      <div className="digital-excellence-bg" style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+        <div 
+          style={{
+            backgroundImage: "url('/digital-excellence-bg.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            inset: 0,
+            zIndex: -1
+          }}
+        />
         <div className="digital-excellence-overlay"></div>
       </div>
       <Reveal direction="right" delay={0.12}>
@@ -290,7 +302,14 @@ export function FaqSection() {
             const id = faq.id || index
 
             return (
-              <article className={open === index ? 'open' : ''} key={id}>
+              <motion.article 
+                className={open === index ? 'open' : ''} 
+                key={id}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+              >
                 <button aria-expanded={open === index} onClick={() => setOpen(open === index ? null : index)}>
                   <span>{question}</span>
                   <ChevronDown size={18} />
@@ -298,7 +317,7 @@ export function FaqSection() {
                 <div className="faq-answer">
                   <p>{answer}</p>
                 </div>
-              </article>
+              </motion.article>
             )
           })}
         </div>
@@ -398,6 +417,26 @@ function SectionTitle({ eyebrow, title, subtitle }) {
 }
 
 export function AboutUsSection() {
+  const [logos, setLogos] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/logo-carousel`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.status === 200 && Array.isArray(json.data)) {
+          let duplicated = [...json.data];
+          if (duplicated.length > 0) {
+            // Duplicate array items enough times to fill the marquee track smoothly
+            while (duplicated.length < 8) {
+              duplicated = [...duplicated, ...json.data];
+            }
+          }
+          setLogos(duplicated);
+        }
+      })
+      .catch(err => console.error('Failed to fetch logos:', err));
+  }, []);
+
   return (
     <section className="about-wrapper">
       {/* Image — positioned absolutely on desktop to fill right half */}
@@ -421,21 +460,25 @@ export function AboutUsSection() {
               ))}
             </div>
 
-            <div className="about-clients-band">
-              <div className="about-clients-label">
-                Our Clients
-              </div>
-              <div className="about-marquee-container">
-                <div className="btr-marquee-track">
-                  <img src="https://btr.braventra.in/public/logos/logo-1772212010223.png" alt="Client Logo" />
-                  <img src="https://btr.braventra.in/public/logos/logo-1772212010223.png" alt="Client Logo" />
-                  <img src="https://btr.braventra.in/public/logos/logo-1772212010223.png" alt="Client Logo" />
-                  <img src="https://btr.braventra.in/public/logos/logo-1772212010223.png" alt="Client Logo" />
-                  <img src="https://btr.braventra.in/public/logos/logo-1772212010223.png" alt="Client Logo" />
-                  <img src="https://btr.braventra.in/public/logos/logo-1772212010223.png" alt="Client Logo" />
+            {logos.length > 0 && (
+              <div className="about-clients-band">
+                <div className="about-clients-label">
+                  Our Clients
+                </div>
+                <div className="about-marquee-container">
+                  <div className="btr-marquee-track">
+                    {logos.map((logo, index) => {
+                      const resolvedImage = logo.image_url.startsWith('http') 
+                        ? logo.image_url 
+                        : `${API_BASE_URL}${logo.image_url.startsWith('/') ? '' : '/'}${logo.image_url}`;
+                      return (
+                        <img key={`${logo.id}-${index}`} src={resolvedImage} alt={logo.title || 'Client Logo'} />
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </Reveal>
       </div>
@@ -444,16 +487,6 @@ export function AboutUsSection() {
 }
 
 export function ProcessSection() {
-  const targetRef = useRef(null)
-  
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ["start start", "end end"]
-  })
-
-  // 4 cards horizontally. We slide the track left.
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-45%"])
-  
   const processSteps = [
     { icon: <Brain size={28} />, title: "Discovery", subtitle: "Research & Strategy", text: "We deeply analyze your brand, competitors and audience before starting." },
     { icon: <MousePointerClick size={28} />, title: "Planning", subtitle: "Wireframe & Flow", text: "We design structure and define user journey for optimal experience." },
@@ -461,39 +494,41 @@ export function ProcessSection() {
     { icon: <Mountain size={28} />, title: "Growth", subtitle: "Launch & Optimize", text: "We launch, monitor and continuously improve performance." },
   ]
 
-  return (
-    <section ref={targetRef} className="process-scroll-target">
-      <div className="process-sticky-container">
-        <div className="process-sticky-header">
-          <h2>Our Process</h2>
-        </div>
-        
-        <div className="process-horizontal-overflow">
-          <motion.div style={{ x }} className="process-horizontal-track">
-            {/* The horizontal lines */}
-            <div className="process-timeline-bg" />
-            <motion.div 
-              className="process-timeline-fill" 
-              style={{ scaleX: scrollYProgress, transformOrigin: 'left' }} 
-            />
+  // Map each index to its specific starting position
+  const getInitialState = (index) => {
+    switch(index) {
+      case 0: return { opacity: 0, x: -150 }; // from left
+      case 1: return { opacity: 0, y: 150 };  // from bottom
+      case 2: return { opacity: 0, y: -150 }; // from top
+      case 3: return { opacity: 0, x: 150 };  // from right
+      default: return { opacity: 0, y: 50 };
+    }
+  }
 
-            {processSteps.map((step, index) => {
-              const isTop = index % 2 === 0;
-              return (
-                <div key={index} className={`process-h-card-wrapper ${isTop ? 'align-top' : 'align-bottom'}`}>
-                  <div className="process-number">0{index + 1}</div>
-                  
-                  <div className="process-h-card">
-                    <div className="process-h-icon">{step.icon}</div>
-                    <h3>{step.title}</h3>
-                    <span className="process-h-subtitle">{step.subtitle}</span>
-                    <p>{step.text}</p>
-                  </div>
-                </div>
-              )
-            })}
+  return (
+    <section className="process-section">
+      <div className="process-header">
+        <h2>Our Process</h2>
+      </div>
+      
+      <div className="process-grid">
+        {processSteps.map((step, index) => (
+          <motion.div
+            key={index}
+            className="process-card"
+            initial={getInitialState(index)}
+            whileInView={{ opacity: 1, x: 0, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 2, ease: "easeOut" }}
+          >
+            <div className="process-number">0{index + 1}</div>
+            
+            <div className="process-icon">{step.icon}</div>
+            <h3>{step.title}</h3>
+            <span className="process-subtitle">{step.subtitle}</span>
+            <p>{step.text}</p>
           </motion.div>
-        </div>
+        ))}
       </div>
     </section>
   )
