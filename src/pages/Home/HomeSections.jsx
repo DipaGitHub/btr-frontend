@@ -53,7 +53,7 @@ export function DigitalExcellence() {
           <span className="section-kicker">BUILT FOR PROGRESS</span>
           <h2>Driving Digital Excellence:<br />Unleash the Power of BTR Communication</h2>
           <p>BTR Communication provides professional digital solutions to help businesses establish and grow their online presence. Our services include website design and development, e-commerce solutions, UI/UX design, website maintenance, and performance optimization.</p>
-          <button className="button" onClick={() => go('/about')}>Discover more <ArrowUpRight size={16} /></button>
+          <button className="button" onClick={() => go('/services')}>Discover more <ArrowUpRight size={16} /></button>
         </div>
       </Reveal>
     </section>
@@ -466,13 +466,27 @@ export function AboutUsSection() {
                   Our Clients
                 </div>
                 <div className="about-marquee-container">
-                  <div className="btr-marquee-track">
+                  <div className="about-marquee-track">
                     {logos.map((logo, index) => {
                       const resolvedImage = logo.image_url.startsWith('http') 
                         ? logo.image_url 
                         : `${API_BASE_URL}${logo.image_url.startsWith('/') ? '' : '/'}${logo.image_url}`;
                       return (
-                        <img key={`${logo.id}-${index}`} src={resolvedImage} alt={logo.title || 'Client Logo'} />
+                        <div key={`track1-${logo.id}-${index}`} className="about-logo-item">
+                          <img src={resolvedImage} alt={logo.title || 'Client Logo'} />
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className="about-marquee-track" aria-hidden="true">
+                    {logos.map((logo, index) => {
+                      const resolvedImage = logo.image_url.startsWith('http') 
+                        ? logo.image_url 
+                        : `${API_BASE_URL}${logo.image_url.startsWith('/') ? '' : '/'}${logo.image_url}`;
+                      return (
+                        <div key={`track2-${logo.id}-${index}`} className="about-logo-item">
+                          <img src={resolvedImage} alt={logo.title || 'Client Logo'} />
+                        </div>
                       )
                     })}
                   </div>

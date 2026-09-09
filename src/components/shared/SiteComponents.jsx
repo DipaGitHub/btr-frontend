@@ -3,8 +3,16 @@ import { go } from '../../utils/navigation'
 import { useEffect, useRef } from 'react'
 import { motion, useInView, useSpring, useTransform } from 'framer-motion'
 
-export function Logo({ light = false }) {
-  return <div className={`logo ${light ? 'logo-light' : ''}`}><span>BTR</span><small>COMMUNICATION</small></div>
+export function Logo({ light = false, className = '' }) {
+  return (
+    <div className={`logo-brand ${light ? 'logo-brand-light' : ''} ${className}`}>
+      <img
+        src="/BTR Communication Logo_Trans-BG.png"
+        alt="BTR Communication"
+        className="logo-brand-img"
+      />
+    </div>
+  );
 }
 
 export function Banner({ title, eyebrow = 'WHO WE ARE' }) {

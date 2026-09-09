@@ -77,18 +77,20 @@ p {
 ══════════════════════════════════════════════════════════════ */
 .site-header {
   height: 80px;
-  background: rgba(13, 14, 21, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(13, 14, 21, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--white);
   display: flex;
   align-items: center;
   padding: 0 max(5vw, 32px);
   gap: 40px;
-  position: sticky;
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   transition: background 0.3s;
 }
 
@@ -96,6 +98,30 @@ p {
   border: 0;
   background: none;
   padding: 0
+}
+
+.logo-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 5px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand:hover .logo-brand {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(229, 46, 46, 0.25);
+}
+
+.logo-brand-img {
+  height: 38px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  display: block;
 }
 
 .logo {
@@ -662,7 +688,8 @@ h2 em,
 }
 
 .hero {
-  min-height: 680px;
+  min-height: 760px;
+  padding-top: 80px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -672,7 +699,7 @@ h2 em,
 
 /* Cancel the section-dark top padding so the strip bleeds up */
 .hero.section-dark {
-  padding-top: 0
+  padding-top: 80px;
 }
 
 /* Full-width service category marquee strip */
@@ -692,7 +719,7 @@ h2 em,
   justify-content: space-between;
   gap: 60px;
   flex: 1;
-  padding-top: 70px;
+  padding-top: 50px;
   padding-bottom: 30px;
   position: relative;
   /* To ensure it sits above background */
@@ -704,8 +731,8 @@ h2 em,
 }
 
 .hero h1 {
-  font: 700 clamp(40px, 5.6vw, 76px)/.95 'Poppins';
-  letter-spacing: -.05em;
+  font: 700 clamp(40px, 5.6vw, 76px)/1.08 'Poppins';
+  letter-spacing: -.035em;
   margin: 20px 0 24px;
   color: var(--white);
 }
@@ -719,12 +746,12 @@ h2 em,
 .hero-phrase-wrap {
   display: block;
   overflow: hidden;
-  min-height: 1.05em;
+  min-height: 1.15em;
 }
 
 .hero p {
   font-size: clamp(15px, 1.1vw, 17px);
-  line-height: 1.75;
+  line-height: 1.9;
   color: var(--soft);
 }
 
@@ -855,6 +882,23 @@ h2 em,
   box-shadow: 0 0 0 8px rgba(229, 46, 46, 0.07), 0 0 32px rgba(229, 46, 46, 0.22);
   z-index: 2;
   position: relative;
+}
+
+.orbit-center .logo-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.orbit-center .logo-brand-img {
+  max-height: 52px;
+  max-width: 68px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .orbit-center .logo {
@@ -1245,14 +1289,15 @@ h2 em,
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  max-width: 550px;
+  width: 100%;
+  max-width: 100%;
   box-shadow: 0 0 24px rgba(229, 46, 46, 0.15);
 }
 
 .about-clients-label {
   background: var(--red);
   color: #fff;
-  padding: 16px 24px;
+  padding: 16px 28px 16px 22px;
   font-weight: 700;
   font-size: 14px;
   display: flex;
@@ -1260,18 +1305,7 @@ h2 em,
   position: relative;
   z-index: 2;
   white-space: nowrap;
-}
-
-.about-clients-label::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -12px;
-  width: 24px;
-  height: 100%;
-  background: var(--bg);
-  transform: skewX(-25deg);
-  z-index: -1;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
 }
 
 .about-marquee-container {
@@ -1283,25 +1317,47 @@ h2 em,
   padding: 0 10px;
 }
 
-.about-marquee-container .btr-marquee-track {
-  animation-duration: 15s;
+.about-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-shrink: 0;
+  animation: about-marquee-scroll 22s linear infinite;
 }
 
-.about-marquee-container .btr-marquee-track img {
-  height: 32px;
+.about-marquee-container:hover .about-marquee-track {
+  animation-play-state: paused;
+}
+
+.about-logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  background: none;
+  border: none;
+  transition: transform 0.3s;
+}
+
+.about-logo-item:hover {
+  transform: scale(1.08);
+}
+
+.about-logo-item img {
+  height: 48px;
   width: auto;
-  opacity: 0.8;
-  /* Invert makes white backgrounds black and dark text white. 
-     Screen blend mode makes black backgrounds transparent. 
-     This perfectly handles JPEGs and dark PNGs! */
-  filter: invert(1) grayscale(100%) brightness(1.5);
-  mix-blend-mode: screen;
-  transition: opacity 0.3s;
+  max-width: 140px;
   object-fit: contain;
+  display: block;
 }
 
-.about-marquee-container .btr-marquee-track img:hover {
-  opacity: 1;
+@keyframes about-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 /* Mobile: show image inline below text */
@@ -2116,9 +2172,9 @@ h2 em,
 ══════════════════════════════════════════════════════════════ */
 .page-banner {
   background: #040507;
-  min-height: 140px;
+  min-height: 220px;
   text-align: center;
-  padding: 36px 24px 32px;
+  padding: 110px 24px 36px;
   position: relative;
   overflow: hidden;
 }

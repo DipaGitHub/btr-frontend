@@ -3,30 +3,30 @@
 
 .portfolio-detail-banner{min-height:310px;padding:42px 24px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;background:radial-gradient(circle at 25% 35%,#9d1008 0,transparent 17%),radial-gradient(circle at 76% 30%,#8b0e08 0,transparent 18%),radial-gradient(circle at 100% 100%,#8f0c06 0,transparent 16%),#030303;text-align:center}
 .portfolio-detail-banner>span{width:100%;font-size:12px;font-weight:700;letter-spacing:.18em}
-.portfolio-detail-banner h1{width:100%;max-width:780px;margin:10px auto 14px;font:700 clamp(38px,4.6vw,64px)/1.02 'Space Grotesk';letter-spacing:-.04em}
+.portfolio-detail-banner h1{width:100%;max-width:780px;margin:10px auto 14px;font:700 clamp(38px,4.6vw,64px)/1.02 'Poppins', sans-serif;letter-spacing:-.04em}
 .portfolio-detail-banner button,.portfolio-detail-banner small{border:0;background:none;color:#fff;font-size:12px;padding:0}
 .portfolio-detail-banner button:hover{color:var(--red)}
 
 .portfolio-detail-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:56px;max-width:1160px;margin:auto;padding:84px 32px 105px}
 .portfolio-preview{min-height:430px;border-radius:9px;overflow:hidden;color:#17213b;box-shadow:0 24px 55px #0007;background:#eef1f5}
 .preview-nav{height:56px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;background:#fff;font-size:9px}
-.preview-nav b{font:700 14px 'Space Grotesk';color:var(--red)}
+.preview-nav b{font:700 14px 'Poppins', sans-serif;color:var(--red)}
 .preview-hero{min-height:205px;padding:32px 38px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(110deg,#fff 0 48%,transparent 70%),linear-gradient(135deg,#2d559a,#173168);position:relative}
 .preview-hero small{font-size:8px;font-weight:700;letter-spacing:.1em;color:#e5a311}
-.preview-hero h2{max-width:280px;margin:7px 0;font:700 23px/1.05 'Space Grotesk'}
+.preview-hero h2{max-width:280px;margin:7px 0;font:700 23px/1.05 'Poppins', sans-serif}
 .preview-hero p{max-width:240px;margin:0 0 14px;font-size:10px}
 .preview-hero button{align-self:flex-start;border:0;border-radius:20px;padding:7px 13px;background:#f2b72d;color:#17213b;font-size:8px;font-weight:700}
 .preview-content{min-height:170px;padding:28px 38px;display:grid;grid-template-columns:1fr 1fr;gap:24px;background:#f8f8f7}
 .preview-content div:first-child{display:flex;flex-direction:column;justify-content:center}
 .preview-content small{color:#e5a311;font-size:8px;font-weight:700}
-.preview-content strong{font:600 15px 'Space Grotesk';margin:5px 0}
+.preview-content strong{font:600 15px 'Poppins', sans-serif;margin:5px 0}
 .preview-content span{font-size:9px;color:#606573}
 .preview-photo{border-radius:5px;background:linear-gradient(140deg,#ccd5e3,#7889a4);position:relative}
 .preview-photo:after{content:'';position:absolute;width:42%;height:62%;right:16%;bottom:0;border-radius:50% 50% 0 0;background:#263c60}
 .portfolio-preview.project-peach .preview-hero{background:linear-gradient(110deg,#fff 0 48%,transparent 70%),linear-gradient(135deg,#e9a8a2,#9e4543)}
 .portfolio-preview.project-teal .preview-hero{background:linear-gradient(110deg,#fff 0 48%,transparent 70%),linear-gradient(135deg,#50b6ad,#17475b)}
 
-.portfolio-detail-copy h2{font:600 clamp(30px,3vw,43px)/1.12 'Space Grotesk';margin:11px 0 22px;letter-spacing:-.025em}
+.portfolio-detail-copy h2{font:600 clamp(30px,3vw,43px)/1.12 'Poppins', sans-serif;margin:11px 0 22px;letter-spacing:-.025em}
 .portfolio-detail-copy p{color:var(--soft);font-size:16px;line-height:1.72;margin:0 0 17px}
 .portfolio-detail-copy dl{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:28px 0}
 .portfolio-detail-copy dl div{border-top:1px solid var(--line);padding-top:13px}

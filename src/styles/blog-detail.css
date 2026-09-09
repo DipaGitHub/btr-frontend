@@ -4,7 +4,7 @@
 
 .blog-detail-banner{min-height:255px;padding:38px 24px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;background:radial-gradient(circle at 28% 30%,#971008 0,transparent 17%),radial-gradient(circle at 75% 26%,#921008 0,transparent 18%),radial-gradient(circle at 100% 100%,#8d0b06 0,transparent 16%),#030303;text-align:center}
 .blog-detail-banner>span{width:100%;font-size:12px;font-weight:700;letter-spacing:.18em}
-.blog-detail-banner h1{width:100%;margin:8px 0 10px;font:700 clamp(38px,4.4vw,58px)/1.05 'Space Grotesk';letter-spacing:-.035em}
+.blog-detail-banner h1{width:100%;margin:8px 0 10px;font:700 clamp(38px,4.4vw,58px)/1.05 'Poppins', sans-serif;letter-spacing:-.035em}
 .blog-detail-banner button,.blog-detail-banner small{border:0;background:none;color:#fff;font-size:12px;padding:0}
 .blog-detail-banner button:hover{color:var(--red)}
 
@@ -14,20 +14,20 @@
 .blog-detail-art:before{width:380px;height:180px;left:-80px;bottom:-90px}
 .blog-detail-art:after{width:420px;height:210px;right:-100px;top:-120px}
 .blog-detail-art .idea-trail{color:#73407d;font-size:20px;letter-spacing:8px;margin-bottom:14px;transform:rotate(-8deg)}
-.blog-detail-art>strong{z-index:1;max-width:560px;font:700 clamp(30px,4vw,52px)/.95 'Space Grotesk';letter-spacing:-.045em}
+.blog-detail-art>strong{z-index:1;max-width:560px;font:700 clamp(30px,4vw,52px)/.95 'Poppins', sans-serif;letter-spacing:-.045em}
 .blog-detail-art>span{z-index:1;margin-top:12px;font-size:13px}
 .blog-detail-art>i{z-index:1;margin-top:20px;padding:9px 18px;border-radius:22px;background:var(--red);color:#fff;font-size:10px;font-style:normal;font-weight:700;text-transform:uppercase}
 .blog-detail-art.project-blue{color:#152743}
 .article-meta{display:flex;gap:22px;margin:17px 0;color:var(--muted);font-size:12px}
 .article-meta span{display:flex;align-items:center;gap:5px}
 .article-meta svg{color:var(--red)}
-.blog-article h2{font:600 28px 'Space Grotesk';margin:14px 0}
+.blog-article h2{font:600 28px 'Poppins', sans-serif;margin:14px 0}
 .blog-article p{color:var(--soft);font-size:16px;line-height:1.75;margin:0 0 17px}
 .article-tags{margin-top:30px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);color:var(--muted);font-size:14px}
 .article-tags strong{color:var(--white);margin-right:5px}
 
 .latest-updates{border:1px solid var(--line);border-radius:10px;background:#12131b;padding:20px;position:sticky;top:105px}
-.latest-updates h3{font:600 18px 'Space Grotesk';margin:0 0 18px}
+.latest-updates h3{font:600 18px 'Poppins', sans-serif;margin:0 0 18px}
 .latest-updates>button{width:100%;display:grid;grid-template-columns:70px 1fr;align-items:center;gap:13px;margin-top:12px;padding:11px;border:1px solid var(--line);border-radius:8px;background:#0d0e14;color:var(--white);text-align:left}
 .latest-updates>button:hover,.latest-updates>button.active{border-color:#8f3538;background:#1c1419}
 .latest-updates .blog-detail-art.compact{width:70px;height:54px;min-height:0;border-radius:5px;padding:5px}
