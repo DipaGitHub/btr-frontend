@@ -46,7 +46,7 @@ export function Header({ onApply }) {
   return (
     <header className="site-header">
       <button className="brand" onClick={() => go('/')}>
-        <Logo />
+        <Logo className="header-logo" />
       </button>
 
       <button className="menu-toggle" onClick={() => setMobile(!mobile)}>

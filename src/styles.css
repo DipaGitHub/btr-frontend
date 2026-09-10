@@ -97,7 +97,39 @@ p {
 .brand {
   border: 0;
   background: none;
-  padding: 0
+  padding: 0;
+  cursor: pointer;
+}
+
+.site-header .brand {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 101;
+}
+
+.site-header .brand .logo-brand {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.site-header .brand:hover .logo-brand {
+  transform: translateY(-1px);
+  box-shadow: none;
+  opacity: 0.9;
+}
+
+.site-header .brand .logo-brand-img {
+  height: 50px;
+  width: auto;
+  max-width: 115px;
+  object-fit: contain;
+  display: block;
 }
 
 .logo-brand {
@@ -731,15 +763,18 @@ h2 em,
 }
 
 .hero h1 {
-  font: 700 clamp(40px, 5.6vw, 76px)/1.08 'Poppins';
+  font: 800 clamp(44px, 5.8vw, 76px)/1.08 'Poppins', sans-serif;
   letter-spacing: -.035em;
   margin: 20px 0 24px;
   color: var(--white);
 }
 
 .hero h1 em {
+  font-size: 0.84em;
+  font-weight: 700;
   font-style: normal;
-  color: var(--red)
+  color: var(--red);
+  margin-top: 6px;
 }
 
 /* Animated phrase wrapper — clips the exit/enter slides */
@@ -876,12 +911,21 @@ h2 em,
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  background: #f0efe9;
+  background: radial-gradient(circle at 40% 40%, rgba(26, 30, 48, 0.9) 0%, rgba(10, 12, 18, 0.95) 100%);
+  border: 1.5px solid rgba(229, 46, 46, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: grid;
   place-items: center;
-  box-shadow: 0 0 0 8px rgba(229, 46, 46, 0.07), 0 0 32px rgba(229, 46, 46, 0.22);
+  box-shadow: 0 0 24px rgba(229, 46, 46, 0.35), inset 0 0 16px rgba(229, 46, 46, 0.2), 0 0 0 6px rgba(229, 46, 46, 0.08);
   z-index: 2;
   position: relative;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.orbit-center:hover {
+  border-color: rgba(229, 46, 46, 0.8);
+  box-shadow: 0 0 32px rgba(229, 46, 46, 0.55), inset 0 0 20px rgba(229, 46, 46, 0.3), 0 0 0 8px rgba(229, 46, 46, 0.12);
 }
 
 .orbit-center .logo-brand {
@@ -899,6 +943,7 @@ h2 em,
   width: auto;
   height: auto;
   object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(229, 46, 46, 0.4));
 }
 
 .orbit-center .logo {
@@ -1355,6 +1400,7 @@ h2 em,
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-100%);
   }
@@ -2084,6 +2130,22 @@ h2 em,
   gap: 50px;
   padding-bottom: 50px;
   border-bottom: 1px solid var(--line);
+}
+
+.footer .logo-brand {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: inline-flex;
+}
+
+.footer .logo-brand-img {
+  height: 42px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  display: block;
 }
 
 .footer p,
@@ -3023,6 +3085,12 @@ h2 em,
   .site-header {
     height: 68px;
     padding: 0 20px
+  }
+
+  .site-header .brand .logo-brand-img {
+    height: 34px;
+    width: auto;
+    max-width: 100px;
   }
 
   .header-cta {

@@ -7,7 +7,7 @@ export function Footer() {
     <footer className="footer">
       <div className="footer-top">
         <div>
-          <Logo light />
+          <Logo className="header-logo" />
           <p style={{ marginTop: '20px' }}>
             Transforming Ideas into Digital Excellence. Elevate your online presence with our innovative solutions and strategic digital services.
           </p>

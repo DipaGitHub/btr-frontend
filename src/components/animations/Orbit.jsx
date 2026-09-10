@@ -102,7 +102,7 @@ export function OrbitSystem() {
 
       {/* Central BTR logo */}
       <div className="orbit-center">
-        <Logo light />
+        <Logo className="header-logo" />
       </div>
 
       {/* Ambient glow */}

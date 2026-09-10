@@ -4,10 +4,15 @@ import { useEffect, useRef } from 'react'
 import { motion, useInView, useSpring, useTransform } from 'framer-motion'
 
 export function Logo({ light = false, className = '' }) {
+  const isHeader = className.includes('header-logo');
+  const logoSrc = isHeader
+    ? "/BTR_Logo_Header.png"
+    : "/BTR Communication Logo_Trans-BG.png";
+
   return (
     <div className={`logo-brand ${light ? 'logo-brand-light' : ''} ${className}`}>
       <img
-        src="/BTR Communication Logo_Trans-BG.png"
+        src={logoSrc}
         alt="BTR Communication"
         className="logo-brand-img"
       />
