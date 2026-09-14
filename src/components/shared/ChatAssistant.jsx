@@ -1,175 +1,177 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, X, Bot, ChevronRight } from 'lucide-react';
+import { Send, X, Bot, RefreshCw, Sparkles } from 'lucide-react';
 import './ChatAssistant.css';
 import { API_BASE_URL } from '../../utils/apiConfig';
 
-const STEPS = {
-  LOADING: 'loading',
-  TOPIC_SELECTION: 'topic_selection',
-  ASKING_QUESTIONS: 'asking_questions',
-  COLLECTING_NAME: 'collecting_name',
-  COLLECTING_EMAIL: 'collecting_email',
-  COLLECTING_PHONE: 'collecting_phone',
-  SUBMITTED: 'submitted',
-};
+const DEFAULT_WELCOME = "👋 Welcome to BTR Communication! I'm your AI Sales & Support Assistant. How can I help you with your project today?";
+
+const STARTER_PROMPTS = [
+  "What services do you offer?",
+  "How much does a website cost?",
+  "Can I see your previous work / portfolio?",
+  "I want to discuss an upcoming project"
+];
+
+// Helper to generate or get existing unique session ID
+function getSessionId() {
+  let sid = sessionStorage.getItem('btr_ai_session_id');
+  if (!sid) {
+    sid = 'btr_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+    sessionStorage.setItem('btr_ai_session_id', sid);
+  }
+  return sid;
+}
+
+// Simple text formatter for AI responses (handles basic bold, linebreaks, and bullet points)
+function FormattedMessage({ text }) {
+  if (!text) return null;
+
+  const lines = text.split('\n');
+
+  return (
+    <div className="formatted-msg">
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={idx} className="msg-spacer" />;
+        }
+
+        // Bullet point detection
+        const isBullet = trimmed.startsWith('• ') || trimmed.startsWith('- ') || trimmed.startsWith('* ');
+        const cleanLine = isBullet ? trimmed.replace(/^[\*\•\-]\s*/, '') : trimmed;
+
+        // Parse bold text **text**
+        const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
+
+        const renderedLine = parts.map((part, pIdx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={pIdx}>{part.slice(2, -2)}</strong>;
+          }
+          return part;
+        });
+
+        if (isBullet) {
+          return (
+            <div key={idx} className="msg-bullet">
+              <span className="bullet-dot">•</span>
+              <span className="bullet-text">{renderedLine}</span>
+            </div>
+          );
+        }
+
+        return <div key={idx} className="msg-line">{renderedLine}</div>;
+      })}
+    </div>
+  );
+}
 
 export function ChatAssistant({ onClose }) {
-  const [topics, setTopics] = useState([]);
-  const [questions, setQuestions] = useState([]);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [step, setStep] = useState(STEPS.LOADING);
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  const [currentQIndex, setCurrentQIndex] = useState(0);
-  const [userData, setUserData] = useState({ name: '', email: '', phone: '' });
-  const [chatLog, setChatLog] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [botName, setBotName] = useState('BTR Bot');
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [showStarters, setShowStarters] = useState(true);
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const hasInitialized = useRef(false); // Prevent double-init in React strict mode
+  const sessionIdRef = useRef(getSessionId());
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
 
-    fetch(`${API_BASE_URL}/api/chat/config`)
-      .then(res => res.json())
-      .then(data => {
-        setTopics(data.topics || []);
-        setQuestions(data.questions || []);
-        startGreeting();
-      })
-      .catch(() => {
-        startGreeting();
-      });
-  }, []);
+    const sessionId = sessionIdRef.current;
 
-  const startGreeting = () => {
-    addBotMessage("👋 Welcome to BTR Bot! I'm here to help you find the right service for your needs.");
-    setTimeout(() => {
-      addBotMessage("How can I assist you today? Please select a topic below, or type your query.");
-      setStep(STEPS.TOPIC_SELECTION);
-    }, 1200);
-  };
+    // 1. Fetch AI config and history
+    Promise.all([
+      fetch(`${API_BASE_URL}/api/ai/config`).then(res => res.json()).catch(() => null),
+      fetch(`${API_BASE_URL}/api/ai/history/${sessionId}`).then(res => res.json()).catch(() => null)
+    ]).then(([configData, historyData]) => {
+      const welcome = configData?.welcomeMessage || DEFAULT_WELCOME;
+      if (configData?.botName) {
+        setBotName(configData.botName);
+      }
+
+      if (historyData?.messages && historyData.messages.length > 0) {
+        setMessages(historyData.messages);
+        setShowStarters(false);
+      } else {
+        setMessages([{ from: 'bot', text: welcome }]);
+        setShowStarters(true);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const addBotMessage = (text) => {
-    const msg = { from: 'bot', text };
-    setMessages(prev => [...prev, msg]);
-    setChatLog(prev => [...prev, msg]);
-  };
+  const sendMessage = async (textToSend) => {
+    const message = (textToSend || input).trim();
+    if (!message || isTyping) return;
 
-  const addUserMessage = (text) => {
-    const msg = { from: 'user', text };
-    setMessages(prev => [...prev, msg]);
-    setChatLog(prev => [...prev, msg]);
-  };
-
-  const botSayDelayed = (text, delay = 900) => {
-    setIsTyping(true);
-    return new Promise(resolve => {
-      setTimeout(() => {
-        setIsTyping(false);
-        addBotMessage(text);
-        resolve();
-      }, delay);
-    });
-  };
-
-  const handleTopicSelect = async (topic) => {
-    const label = topic.chat_label || topic.service_name;
-    addUserMessage(label);
-    setSelectedTopic(topic);
-
-    const topicQuestions = questions.filter(q => q.topic_id === topic.id);
-    topic.topicQuestions = topicQuestions;
-
-    if (topicQuestions.length > 0) {
-      await botSayDelayed(`Great! I have a few quick questions to better understand your needs. 🧐`);
-      await botSayDelayed(topicQuestions[0].question_text, 700);
-      setCurrentQIndex(0);
-      setStep(STEPS.ASKING_QUESTIONS);
-    } else {
-      await botSayDelayed(`To connect you with our ${topic.service_name} experts, I'll need your contact details.`);
-      await botSayDelayed("What's your full name?", 600);
-      setStep(STEPS.COLLECTING_NAME);
-    }
-  };
-
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input.trim() || isTyping) return;
-    const value = input.trim();
     setInput('');
-    addUserMessage(value);
+    setErrorMsg(null);
+    setShowStarters(false);
 
-    if (step === STEPS.ASKING_QUESTIONS) {
-      const qs = selectedTopic?.topicQuestions || [];
-      const nextIndex = currentQIndex + 1;
+    // Add user message to UI immediately
+    const userMsg = { from: 'user', text: message };
+    setMessages(prev => [...prev, userMsg]);
+    setIsTyping(true);
 
-      if (nextIndex < qs.length) {
-        setCurrentQIndex(nextIndex);
-        await botSayDelayed(qs[nextIndex].question_text);
-      } else {
-        setCurrentQIndex(nextIndex);
-        await botSayDelayed("Thanks for sharing! 🙏 To get you connected with the right team, I just need a few contact details.");
-        await botSayDelayed("What's your full name?", 600);
-        setStep(STEPS.COLLECTING_NAME);
-      }
-
-    } else if (step === STEPS.COLLECTING_NAME) {
-      setUserData(prev => ({ ...prev, name: value }));
-      await botSayDelayed(`Nice to meet you, ${value}! 😊 What's your email address?`);
-      setStep(STEPS.COLLECTING_EMAIL);
-
-    } else if (step === STEPS.COLLECTING_EMAIL) {
-      setUserData(prev => ({ ...prev, email: value }));
-      await botSayDelayed("Perfect! And lastly, your phone number?");
-      setStep(STEPS.COLLECTING_PHONE);
-
-    } else if (step === STEPS.COLLECTING_PHONE) {
-      const finalData = { ...userData, phone: value };
-      setUserData(finalData);
-      setStep(STEPS.SUBMITTED);
-
-      fetch(`${API_BASE_URL}/api/leads/create`, {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: finalData.name,
-          email: finalData.email,
-          phone: value,
-          service: selectedTopic?.service_name || 'General Inquiry',
-          source: 'Chat Assistant',
-          chat_transcript: JSON.stringify([...chatLog, { from: 'user', text: value }])
+          sessionId: sessionIdRef.current,
+          message: message
         })
-      }).catch(err => console.error("Lead submit error:", err));
+      });
 
-      await botSayDelayed("All done! ✅ We've received your details. One of our experts will reach out to you very soon. Thank you!");
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status}`);
+      }
+
+      const data = await res.json();
+      const reply = data.message || "I've received your request. How else can I assist you with BTR services?";
+
+      setMessages(prev => [...prev, { from: 'bot', text: reply }]);
+    } catch (err) {
+      console.error("AI Chat error:", err);
+      setErrorMsg("Failed to connect to AI Assistant. Please try again.");
+      setMessages(prev => [
+        ...prev,
+        {
+          from: 'bot',
+          text: "I'm having a brief issue connecting to our servers. Please try again or reach out to us at info@btrcommunication.com."
+        }
+      ]);
+    } finally {
+      setIsTyping(false);
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
-
-    inputRef.current?.focus();
   };
 
-  const getPlaceholder = () => {
-    if (step === STEPS.COLLECTING_NAME) return "Enter your full name...";
-    if (step === STEPS.COLLECTING_EMAIL) return "Enter your email address...";
-    if (step === STEPS.COLLECTING_PHONE) return "Enter your phone number...";
-    if (step === STEPS.ASKING_QUESTIONS) return "Type your answer...";
-    return "Type a message...";
+  const handleSend = (e) => {
+    e.preventDefault();
+    sendMessage();
   };
 
-  const showInput = [
-    STEPS.ASKING_QUESTIONS,
-    STEPS.COLLECTING_NAME,
-    STEPS.COLLECTING_EMAIL,
-    STEPS.COLLECTING_PHONE,
-  ].includes(step);
+  const handleStarterClick = (prompt) => {
+    sendMessage(prompt);
+  };
 
-  const showTopics = step === STEPS.TOPIC_SELECTION && !isTyping && topics.length > 0;
+  const handleResetSession = () => {
+    const newSid = 'btr_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+    sessionStorage.setItem('btr_ai_session_id', newSid);
+    sessionIdRef.current = newSid;
+    setMessages([{ from: 'bot', text: DEFAULT_WELCOME }]);
+    setShowStarters(true);
+    setErrorMsg(null);
+  };
 
   return (
     <div className="chat-assistant-panel">
@@ -180,13 +182,25 @@ export function ChatAssistant({ onClose }) {
             <Bot size={16} />
           </div>
           <div>
-            <h3>BTR Bot</h3>
-            <span className="online-status">● Online</span>
+            <div className="flex items-center gap-1.5">
+              <h3>{botName}</h3>
+              <Sparkles size={12} className="text-amber-400" />
+            </div>
+            <span className="online-status">● AI Online</span>
           </div>
         </div>
-        <button className="close-btn" onClick={onClose}>
-          <X size={16} />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            className="close-btn"
+            onClick={handleResetSession}
+            title="Start new conversation"
+          >
+            <RefreshCw size={14} />
+          </button>
+          <button className="close-btn" onClick={onClose} title="Close Chat">
+            <X size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Messages */}
@@ -196,7 +210,9 @@ export function ChatAssistant({ onClose }) {
             {m.from === 'bot' && (
               <div className="msg-avatar"><Bot size={12} /></div>
             )}
-            <div className="msg-bubble">{m.text}</div>
+            <div className="msg-bubble">
+              {m.from === 'bot' ? <FormattedMessage text={m.text} /> : m.text}
+            </div>
           </div>
         ))}
 
@@ -210,18 +226,17 @@ export function ChatAssistant({ onClose }) {
           </div>
         )}
 
-        {/* Topic chips — shown AFTER greeting, using chat_label */}
-        {showTopics && (
+        {/* Quick starter chips */}
+        {showStarters && !isTyping && (
           <div className="topic-chips">
-            {topics.map(t => (
+            <span className="starter-hint">💡 Suggested topics:</span>
+            {STARTER_PROMPTS.map((prompt, idx) => (
               <button
-                key={t.id}
+                key={idx}
                 className="topic-chip"
-                onClick={() => handleTopicSelect(t)}
+                onClick={() => handleStarterClick(prompt)}
               >
-                {/* Show the custom chat_label if set, otherwise fall back to service_name */}
-                {t.chat_label || t.service_name}
-                <ChevronRight size={14} />
+                {prompt}
               </button>
             ))}
           </div>
@@ -231,21 +246,20 @@ export function ChatAssistant({ onClose }) {
       </div>
 
       {/* Input */}
-      {showInput && (
-        <form className="chat-footer" onSubmit={handleSend}>
-          <input
-            ref={inputRef}
-            type={step === STEPS.COLLECTING_EMAIL ? 'email' : step === STEPS.COLLECTING_PHONE ? 'tel' : 'text'}
-            placeholder={getPlaceholder()}
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            autoFocus
-          />
-          <button type="submit" disabled={isTyping}>
-            <Send size={16} />
-          </button>
-        </form>
-      )}
+      <form className="chat-footer" onSubmit={handleSend}>
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Ask anything about BTR services, pricing, projects..."
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          disabled={isTyping}
+          autoFocus
+        />
+        <button type="submit" disabled={isTyping || !input.trim()}>
+          <Send size={16} />
+        </button>
+      </form>
     </div>
   );
 }

@@ -231,3 +231,42 @@
   opacity: 0.4;
   cursor: default;
 }
+
+/* === Formatted AI Message Styles === */
+.formatted-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.msg-line {
+  line-height: 1.45;
+}
+
+.msg-spacer {
+  height: 6px;
+}
+
+.msg-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-left: 4px;
+}
+
+.bullet-dot {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.bullet-text {
+  flex: 1;
+}
+
+.starter-hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
